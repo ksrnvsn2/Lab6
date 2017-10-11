@@ -44,8 +44,22 @@ public class FrontCompression {
         /*
          * Complete this function.
          */
+        String[] splitCorpus = corpus.split("\n");
+        String previousWord;
+        String currentWord = splitCorpus[0];
 
-        return "";
+        String compressedString = "0 " + currentWord + "\n";
+
+        for (int lineNum = 1; lineNum < splitCorpus.length; lineNum++) {
+            previousWord = currentWord;
+            currentWord = splitCorpus[lineNum];
+            int lengthOfPrefix = longestPrefix(previousWord, currentWord);
+            String remainingWord =  currentWord.substring(lengthOfPrefix);
+
+            compressedString += lengthOfPrefix + " " + remainingWord + "\n";
+
+        }
+        return compressedString;
     }
 
     /**
@@ -67,22 +81,59 @@ public class FrontCompression {
         /*
          * Complete this function.
          */
+        String[] splitCorpus = corpus.split("\n");
+        String previousWord;
+        String[] splitCurrWord = splitCorpus[0].split(" ");
+        String remainingWord = splitCurrWord[1];
+        String currentWord = remainingWord;
 
-        return "";
+        String decompressedString = currentWord + "\n";
+
+        for (int lineNum = 1; lineNum < splitCorpus.length; lineNum++) {
+            previousWord = currentWord;
+            splitCurrWord = splitCorpus[lineNum].split(" ");
+            remainingWord = splitCurrWord[1];
+            int lengthOfPrefix = Integer.valueOf(splitCurrWord[0]);
+            String prefix =  previousWord.substring(0, lengthOfPrefix);
+            currentWord = prefix + remainingWord;
+
+            decompressedString += currentWord + "\n";
+
+        }
+
+        return decompressedString;
     }
 
     /**
      * Compute the length of the common prefix between two strings.
      *
-     * @param firstString the first string
-     * @param secondString the second string
+     * @param word1 the first string
+     * @param word2 the second string
      * @return the length of the common prefix between the two strings
      */
-    private static int longestPrefix(final String firstString, final String secondString) {
+    private static int longestPrefix(final String word1, final String word2) {
         /*
          * Complete this function.
          */
-        return 0;
+        String prefix = "";
+        int shorterWordLength;
+
+        if (word1.length() < word2.length()) {
+            shorterWordLength = word1.length();
+        } else {
+            shorterWordLength = word2.length();
+        }
+
+        for (int index = 0; index < shorterWordLength; index++) {
+            char letter1 = word1.charAt(index);
+            char letter2 = word2.charAt(index);
+
+            if (letter1 != letter2) {
+                break;
+            }
+            prefix += letter1;
+        }
+        return prefix.length();
     }
 
     /**
